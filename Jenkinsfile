@@ -9,6 +9,7 @@ pipeline {
         NEXUS_URL = "http://54.206.135.18:30080/"
         DOCKER_IMAGE = "381492179072.dkr.ecr.ap-southeast-2.amazonaws.com/${APP_NAME}:latest"
         AWS_REGION = "ap-southeast-2"
+        AWS_CREDENTIALS_ID = "aws-ecr-creds" // Jenkins AWS credentials ID
     }
 
     stages {
@@ -67,11 +68,17 @@ pipeline {
 
         stage('Docker Build & Push to ECR') {
             steps {
-                script {
-                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin 381492179072.dkr.ecr.${AWS_REGION}.amazonaws.com"
-                    sh "docker build -t ${APP_NAME} ."
-                    sh "docker tag ${APP_NAME}:latest ${DOCKER_IMAGE}"
-                    sh "docker push ${DOCKER_IMAGE}"
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: "${AWS_CREDENTIALS_ID}"
+                ]]) {
+                    sh """
+                    aws ecr get-login-password --region ${AWS_REGION} | \
+                    docker login --username AWS --password-stdin 381492179072.dkr.ecr.${AWS_REGION}.amazonaws.com
+                    docker build -t ${APP_NAME} .
+                    docker tag ${APP_NAME}:latest ${DOCKER_IMAGE}
+                    docker push ${DOCKER_IMAGE}
+                    """
                 }
             }
         }
