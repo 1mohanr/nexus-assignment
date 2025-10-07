@@ -26,7 +26,7 @@ pipeline {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     // Use Jenkins SonarQube Scanner plugin
-                    sh "${tool 'SonarQubeScanner'}/bin/sonar-scanner -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.login=sonarqube-token -Dsonar.host.url=http://54.206.135.18:30080/"
+                    sh "${tool 'SonarQubeScanner'}/bin/sonar-scanner -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.login=sonarqube-token -Dsonar.host.url=http://3.106.241.242:30466/"
                 }
             }
         }
@@ -61,7 +61,7 @@ pipeline {
             }
         }
 
-        // Stage 5: Docker Image Build & Push to AWS ECR
+        // Stage 5: Docker Build & Push to AWS ECR
         stage('Docker Build & Push to ECR') {
             steps {
                 script {
