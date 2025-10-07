@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = "my-app"
         DOCKER_IMAGE = "381492179072.dkr.ecr.ap-southeast-2.amazonaws.com/${APP_NAME}:${env.BUILD_NUMBER}"
-        SONARQUBE_SERVER = "SonarQubeServer"  // Jenkins SonarQube server ID
+        SONARQUBE_SERVER = "SonarQube"  // Jenkins SonarQube server ID
         NEXUS_URL = "http://54.206.135.18:30080/repository/maven-releases/"
     }
 
