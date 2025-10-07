@@ -52,10 +52,10 @@ pipeline {
                     repository: 'maven-releases',
                     credentialsId: 'nexus-credentials',
                     groupId: 'com.example',
-                    artifactId: "${APP_NAME}",
                     version: "${env.BUILD_NUMBER}",
-                    type: 'zip',
-                    file: "dist/${APP_NAME}.zip"
+                    artifacts: [
+                        [artifactId: "${APP_NAME}", classifier: '', file: "dist/${APP_NAME}.zip", type: 'zip']
+                    ]
                 )
             }
         }
