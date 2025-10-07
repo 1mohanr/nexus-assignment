@@ -39,6 +39,15 @@ pipeline {
             }
         }
 
+        stage('Package') {
+            steps {
+                sh '''
+                mkdir -p dist
+                zip -r dist/${APP_NAME}.zip . -x "node_modules/*" "*.git*" "dist/*"
+                '''
+            }
+        }
+
         stage('Publish to Nexus') {
             steps {
                 nexusArtifactUploader(
