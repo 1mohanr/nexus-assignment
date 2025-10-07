@@ -4,8 +4,7 @@ pipeline {
     environment {
         APP_NAME = "my-app"
         DOCKER_IMAGE = "381492179072.dkr.ecr.ap-southeast-2.amazonaws.com/${APP_NAME}:${env.BUILD_NUMBER}"
-        SONARQUBE_SERVER = "SonarQube"           // Jenkins SonarQube installation name
-        SONAR_SCANNER_TOOL = "SonarQubeScanner"  // Jenkins SonarQube Scanner tool name
+        SONARQUBE_SERVER = "SonarQube"  // Jenkins SonarQube installation name
         NEXUS_URL = "http://54.206.135.18:30080/repository/maven-releases/"
     }
 
@@ -26,7 +25,8 @@ pipeline {
         stage('Code Scan') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                    sh "${tool '${SONAR_SCANNER_TOOL}'}/bin/sonar-scanner -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.login=sonarqube-token -Dsonar.host.url=http://54.206.135.18:30080/"
+                    // Use Jenkins SonarQube Scanner plugin
+                    sh "${tool 'SonarQubeScanner'}/bin/sonar-scanner -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.login=sonarqube-token -Dsonar.host.url=http://54.206.135.18:30080/"
                 }
             }
         }
